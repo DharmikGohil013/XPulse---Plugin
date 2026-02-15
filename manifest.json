@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "XPulse — Gamified Productivity Tracker",
   "short_name": "XPulse",
-  "version": "1.0.0",
-  "description": "Transform your browsing into an RPG-style productivity engine. Earn XP, level up, maintain streaks, and unlock achievements.",
+  "version": "2.0.0",
+  "description": "Transform your browsing into an RPG-style productivity engine. Earn XP with combo multipliers, track focus scores, unlock 25+ tiered achievements, view heatmaps, and dominate your productivity.",
   "permissions": [
     "storage",
     "tabs",
@@ -31,6 +31,7 @@
     },
     "default_title": "XPulse — Your Productivity RPG"
   },
+  "options_page": "options/options.html",
   "icons": {
     "16": "assets/icons/icon16.png",
     "48": "assets/icons/icon48.png",
