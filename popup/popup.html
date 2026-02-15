@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=400" />
+  <title>XPulse</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="xp-container">
+
+    <!-- ═══════════ HEADER ═══════════ -->
+    <header class="xp-header">
+      <div class="xp-logo">
+        <span class="xp-logo-icon">⚡</span>
+        <span class="xp-logo-text">XPulse</span>
+      </div>
+      <div class="xp-level-badge" id="levelBadge">
+        <span class="xp-level-label">LVL</span>
+        <span class="xp-level-num" id="levelNum">1</span>
+      </div>
+    </header>
+
+    <!-- ═══════════ CIRCULAR PROGRESS ═══════════ -->
+    <section class="xp-ring-section">
+      <div class="xp-ring-wrapper">
+        <svg class="xp-ring" viewBox="0 0 120 120">
+          <circle class="xp-ring-bg" cx="60" cy="60" r="52" />
+          <circle class="xp-ring-fill" id="ringFill" cx="60" cy="60" r="52"
+                  stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+        </svg>
+        <div class="xp-ring-center">
+          <span class="xp-ring-percent" id="ringPercent">0%</span>
+          <span class="xp-ring-sublabel">to next level</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ STATS CARDS ═══════════ -->
+    <section class="xp-stats">
+      <div class="xp-stat-card">
+        <span class="xp-stat-icon">✨</span>
+        <div class="xp-stat-body">
+          <span class="xp-stat-value" id="totalXp">0</span>
+          <span class="xp-stat-label">Total XP</span>
+        </div>
+      </div>
+      <div class="xp-stat-card">
+        <span class="xp-stat-icon">🔥</span>
+        <div class="xp-stat-body">
+          <span class="xp-stat-value" id="currentStreak">0</span>
+          <span class="xp-stat-label">Day Streak</span>
+        </div>
+      </div>
+      <div class="xp-stat-card">
+        <span class="xp-stat-icon">🏅</span>
+        <div class="xp-stat-body">
+          <span class="xp-stat-value" id="longestStreak">0</span>
+          <span class="xp-stat-label">Best Streak</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ XP BAR ═══════════ -->
+    <section class="xp-bar-section">
+      <div class="xp-bar-labels">
+        <span id="xpCurrent">0 XP</span>
+        <span id="xpNext">100 XP</span>
+      </div>
+      <div class="xp-bar-track">
+        <div class="xp-bar-fill" id="xpBarFill" style="width: 0%"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ TODAY'S BREAKDOWN ═══════════ -->
+    <section class="xp-today">
+      <h3 class="xp-section-title">Today</h3>
+      <div class="xp-today-row">
+        <span class="xp-today-dot productive"></span>
+        <span class="xp-today-label">Productive</span>
+        <span class="xp-today-val" id="todayProductive">0 XP</span>
+      </div>
+      <div class="xp-today-row">
+        <span class="xp-today-dot neutral"></span>
+        <span class="xp-today-label">Neutral</span>
+        <span class="xp-today-val" id="todayNeutral">0 XP</span>
+      </div>
+      <div class="xp-today-row">
+        <span class="xp-today-dot distracting"></span>
+        <span class="xp-today-label">Distracting</span>
+        <span class="xp-today-val" id="todayDistracting">0 XP</span>
+      </div>
+      <div class="xp-productivity-ratio">
+        <span>Productivity Ratio</span>
+        <span class="xp-ratio-val" id="prodRatio">—</span>
+      </div>
+    </section>
+
+    <!-- ═══════════ WEEKLY CHART ═══════════ -->
+    <section class="xp-weekly">
+      <h3 class="xp-section-title">Weekly Overview</h3>
+      <div class="xp-chart" id="weeklyChart">
+        <!-- dynamically filled -->
+      </div>
+    </section>
+
+    <!-- ═══════════ ACHIEVEMENTS ═══════════ -->
+    <section class="xp-achievements">
+      <h3 class="xp-section-title">
+        Achievements
+        <span class="xp-ach-count" id="achCount">0 / 0</span>
+      </h3>
+      <div class="xp-ach-grid" id="achGrid">
+        <!-- dynamically filled -->
+      </div>
+    </section>
+
+    <!-- ═══════════ FOOTER / DEV ═══════════ -->
+    <footer class="xp-footer">
+      <button class="xp-btn xp-btn-export" id="btnExport" title="Export stats as JSON">📤 Export</button>
+      <button class="xp-btn xp-btn-reset" id="btnReset" title="Reset all data (dev)">🗑️ Reset</button>
+    </footer>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+/* ============================================================
+ *  XPulse Popup — Premium Dark-Mode Glassmorphism UI
+ * ============================================================
+ *  Design tokens → CSS custom properties at :root
+ *  Layout uses flexbox for vertical flow.
+ *  No inline styles — everything lives here.
+ * ============================================================ */
+
+/* ─── Reset & Tokens ────────────────────────────────────── */
+
+:root {
+  --bg-primary:   #0d1117;
+  --bg-card:      rgba(22, 27, 34, 0.85);
+  --bg-card-alt:  rgba(30, 37, 48, 0.7);
+  --glass-border: rgba(56, 68, 90, 0.45);
+  --accent:       #58a6ff;
+  --accent-glow:  rgba(88, 166, 255, 0.35);
+  --accent-green: #00c9a7;
+  --accent-red:   #ff6b6b;
+  --accent-amber: #f0b429;
+  --accent-purple:#a855f7;
+  --text-primary: #e6edf3;
+  --text-muted:   #8b949e;
+  --text-dim:     #484f58;
+  --radius:       12px;
+  --radius-sm:    8px;
+  --font:         'Segoe UI', system-ui, -apple-system, sans-serif;
+  --transition:   0.3s cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 380px;
+  min-height: 520px;
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::-webkit-scrollbar { width: 5px; }
+body::-webkit-scrollbar-track { background: transparent; }
+body::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 4px; }
+
+/* ─── Container ─────────────────────────────────────────── */
+
+.xp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 16px 14px;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+
+.xp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xp-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.xp-logo-icon {
+  font-size: 22px;
+  filter: drop-shadow(0 0 6px var(--accent-glow));
+}
+
+.xp-logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.xp-level-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+  box-shadow: 0 0 18px var(--accent-glow);
+  transition: transform var(--transition);
+}
+
+.xp-level-badge:hover {
+  transform: scale(1.08);
+}
+
+.xp-level-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
+.xp-level-num {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ─── Circular Progress Ring ────────────────────────────── */
+
+.xp-ring-section {
+  display: flex;
+  justify-content: center;
+}
+
+.xp-ring-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.xp-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.xp-ring-bg {
+  fill: none;
+  stroke: var(--bg-card-alt);
+  stroke-width: 8;
+}
+
+.xp-ring-fill {
+  fill: none;
+  stroke: url(#ringGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+/* Gradient fallback — real gradient applied via inline SVG trick
+   or we just use a solid accent. Keeping it simple: */
+.xp-ring-fill {
+  stroke: var(--accent);
+}
+
+.xp-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.xp-ring-percent {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.xp-ring-sublabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ─── Stat Cards ────────────────────────────────────────── */
+
+.xp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.xp-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.xp-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.xp-stat-icon {
+  font-size: 20px;
+}
+
+.xp-stat-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.xp-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.xp-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* ─── XP Bar ────────────────────────────────────────────── */
+
+.xp-bar-section {
+  padding: 0 2px;
+}
+
+.xp-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.xp-bar-track {
+  width: 100%;
+  height: 10px;
+  background: var(--bg-card-alt);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.xp-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-green));
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ─── Today Breakdown ───────────────────────────────────── */
+
+.xp-today {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 14px;
+  backdrop-filter: blur(12px);
+}
+
+.xp-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xp-today-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.xp-today-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.xp-today-dot.productive  { background: var(--accent-green); }
+.xp-today-dot.neutral     { background: var(--accent); }
+.xp-today-dot.distracting { background: var(--accent-red); }
+
+.xp-today-label {
+  flex: 1;
+  font-size: 13px;
+}
+
+.xp-today-val {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-productivity-ratio {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--glass-border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.xp-ratio-val {
+  font-weight: 700;
+  color: var(--accent-green);
+  font-size: 14px;
+}
+
+/* ─── Weekly Chart ──────────────────────────────────────── */
+
+.xp-weekly {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 14px;
+  backdrop-filter: blur(12px);
+}
+
+.xp-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 80px;
+  padding-top: 4px;
+}
+
+.xp-chart-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.xp-chart-bar {
+  width: 100%;
+  max-width: 28px;
+  border-radius: 4px 4px 0 0;
+  min-height: 3px;
+  transition: height var(--transition);
+}
+
+.xp-chart-bar.productive  { background: var(--accent-green); }
+.xp-chart-bar.distracting { background: var(--accent-red); opacity: 0.7; }
+
+.xp-chart-day {
+  font-size: 9px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* ─── Achievements ──────────────────────────────────────── */
+
+.xp-achievements {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 14px;
+  backdrop-filter: blur(12px);
+}
+
+.xp-ach-count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.xp-ach-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.xp-ach-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-alt);
+  border: 1px solid transparent;
+  transition: all var(--transition);
+  cursor: default;
+  position: relative;
+}
+
+.xp-ach-item.unlocked {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.xp-ach-item.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
+.xp-ach-item:hover {
+  transform: translateY(-2px);
+}
+
+.xp-ach-icon {
+  font-size: 22px;
+}
+
+.xp-ach-title {
+  font-size: 8px;
+  text-align: center;
+  line-height: 1.2;
+  color: var(--text-muted);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Tooltip on hover */
+.xp-ach-item[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border: 1px solid var(--glass-border);
+  z-index: 10;
+}
+
+.xp-ach-item[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* ─── Footer ────────────────────────────────────────────── */
+
+.xp-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.xp-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font);
+}
+
+.xp-btn:hover {
+  background: var(--bg-card-alt);
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+
+.xp-btn-reset:hover {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+/* ─── Animations ────────────────────────────────────────── */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.xp-container > * {
+  animation: fadeInUp 0.4s ease both;
+}
+
+.xp-container > *:nth-child(1) { animation-delay: 0s; }
+.xp-container > *:nth-child(2) { animation-delay: 0.05s; }
+.xp-container > *:nth-child(3) { animation-delay: 0.1s; }
+.xp-container > *:nth-child(4) { animation-delay: 0.15s; }
+.xp-container > *:nth-child(5) { animation-delay: 0.2s; }
+.xp-container > *:nth-child(6) { animation-delay: 0.25s; }
+.xp-container > *:nth-child(7) { animation-delay: 0.3s; }
+.xp-container > *:nth-child(8) { animation-delay: 0.35s; }
+.xp-container > *:nth-child(9) { animation-delay: 0.4s; }
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 12px var(--accent-glow); }
+  50%      { box-shadow: 0 0 24px var(--accent-glow); }
+}
+
+.xp-level-badge {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.xp-bar-fill {
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
