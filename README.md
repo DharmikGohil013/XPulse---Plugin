@@ -1,180 +1,218 @@
-# ⚡ XPulse — Gamified Productivity Tracker
+# ⚡ XPulse — Turn Productivity Into a Game
 
-> Transform your browser into an RPG-style productivity engine.
+> Level up your focus. Track your progress. Build better browsing habits.
 
-XPulse is a Chrome Extension built on **Manifest V3** that tracks your active browsing time and converts it into an XP / leveling / streak / achievement system — like a lightweight RPG embedded in your browser.
-
----
-
-## Features
-
-| Feature | Description |
-|---------|-------------|
-| **XP System** | Earn +10 XP/min on productive sites, +2 XP/min on neutral sites, lose -5 XP/min on distracting sites |
-| **Level System** | Dynamic leveling with formula `100 × level^1.5` — badge notifications on level-up |
-| **Streak System** | Daily productive-browsing streaks (50+ productive XP/day to maintain) |
-| **Achievements** | 12 tiered achievements across Beginner → Elite |
-| **Premium UI** | Dark glassmorphism popup with circular progress ring, weekly chart, achievement grid |
-| **Anti-Farm** | Only active + visible tab counts; idle detection; XP-per-tick cap; XP floor at 0 |
-| **Badge** | Live extension badge shows current level, flashes `+XP` on gain; color-coded by category |
-| **Data Export** | One-click JSON export of all stats |
+**XPulse** turns your browsing habits into a fun game! Every minute you spend on productive websites earns you experience points (XP), helping you level up just like in video games. It's designed to motivate you to stay focused and build better habits.
 
 ---
 
-## Architecture
+## What Does It Do?
 
-```
-xpulse/
-├── manifest.json              # Manifest V3 config
-├── background.js              # Service worker — tab tracking, XP loop, badge
-├── content.js                 # Page focus/visibility reporter
-├── popup/
-│   ├── popup.html             # Dashboard UI
-│   ├── popup.css              # Glassmorphism dark theme
-│   └── popup.js               # UI controller (zero game logic)
-├── utils/
-│   ├── xpEngine.js            # Domain classification, XP math, level formulas
-│   ├── streakEngine.js        # Daily streak evaluation
-│   ├── achievementEngine.js   # Tiered achievement evaluator
-│   └── storageManager.js      # chrome.storage.local wrapper
-└── assets/
-    └── icons/
-        ├── icon16.png
-        ├── icon48.png
-        └── icon128.png
-```
+**XPulse helps you:**
+- 📊 **Track which websites help or hurt your productivity**
+- 🎮 **Earn points and level up** as you browse productive sites
+- 🔥 **Build daily streaks** by staying focused each day
+- 🏆 **Unlock achievements** for reaching milestones
+- 📈 **See your progress** with beautiful charts and stats
 
-### Module Responsibilities
-
-| Module | Role |
-|--------|------|
-| `background.js` | Service worker: alarm-driven 60 s tick, tab/window tracking, idle API, XP application, level-up/streak/achievement orchestration, badge updates, message API |
-| `content.js` | Lightweight injector: visibility-change & focus/blur detection, user activity heartbeat |
-| `xpEngine.js` | Pure functions: domain classification, XP-per-tick math, level thresholds, progress % |
-| `streakEngine.js` | Pure functions: day-roll logic, streak continuation / reset, today qualification |
-| `achievementEngine.js` | Pure functions: 12 achievement definitions with condition lambdas, evaluator, status merger |
-| `storageManager.js` | Async wrapper over `chrome.storage.local`: init/hydrate, typed accessors, daily bucket rollover, weekly archive, export, factory reset |
-| `popup.js` | DOM renderer: requests state via `chrome.runtime.sendMessage`, renders ring/bars/charts/achievements, export + reset actions |
+Think of it like a fitness tracker, but for your browsing habits!
 
 ---
 
-## Domain Classification
+## How It Works
 
-### Productive (+10 XP/min)
-`stackoverflow.com` · `github.com` · `docs.google.com` · `developer.mozilla.org` · `chat.openai.com` · `learn.microsoft.com` · `medium.com` · `dev.to` · `leetcode.com` · `kaggle.com` · `coursera.org` · `udemy.com` · `edx.org` · `khanacademy.org` · `notion.so` · `figma.com` · `gitlab.com` · `bitbucket.org` · `codepen.io` · `replit.com`
+**Earning Points:**
+- 🟢 **Productive websites** (like GitHub, learning sites, docs): +10 points per minute
+- 🟡 **Regular websites** (most sites): +2 points per minute  
+- 🔴 **Distracting websites** (like YouTube, social media): -5 points per minute
 
-### Distracting (−5 XP/min)
-`youtube.com` · `instagram.com` · `facebook.com` · `netflix.com` · `reddit.com` · `tiktok.com` · `twitter.com` · `x.com` · `twitch.tv` · `pinterest.com` · `tumblr.com` · `snapchat.com` · `9gag.com` · `buzzfeed.com`
+**Leveling Up:**
+- Collect points to reach new levels
+- Get notified when you level up
+- Your level badge shows on the extension icon
 
-### Neutral (+2 XP/min)
-Everything else.
+**Streaks:**
+- Earn 50+ productive points each day to keep your streak alive
+- Track how many days in a row you've stayed focused
 
-Custom overrides can be set via `settings.customCategories` in storage.
-
----
-
-## Level Thresholds
-
-| Level | XP Required |
-|-------|-------------|
-| 1 | 100 |
-| 2 | 283 |
-| 3 | 520 |
-| 4 | 800 |
-| 5 | 1,118 |
-| 10 | 3,162 |
-| 15 | 5,809 |
-| 20 | 8,944 |
-
-Formula: `XP = 100 × level^1.5`
+**Achievements:**
+- Unlock 12 special achievements as you progress
+- From beginner milestones to elite challenges
 
 ---
 
-## Achievements
+## Which Websites Count as Productive?
 
-| Tier | Achievement | Condition |
-|------|-------------|-----------|
-| Beginner | First Steps | 100 total XP |
-| Beginner | Productive Day | 50+ productive XP in one day |
-| Beginner | Level Up! | Reach Level 2 |
-| Intermediate | Week Warrior | 7-day streak |
-| Intermediate | Apprentice | Level 5 |
-| Intermediate | XP Hunter | 1,000 total XP |
-| Advanced | Monthly Master | 30-day streak |
-| Advanced | XP Legend | 5,000 total XP |
-| Advanced | Veteran | Level 10 |
-| Elite | Century Streak | 100-day streak |
-| Elite | Grandmaster | Level 15 |
-| Elite | Transcendent | 20,000 total XP |
+## Which Websites Count as Productive?
+
+### 🟢 Productive Sites (earn +10 points per minute)
+**Learning & Development:**  
+Stack Overflow · GitHub · Google Docs · MDN Web Docs · ChatGPT · Microsoft Learn · Medium · Dev.to · LeetCode · Kaggle · Coursera · Udemy · edX · Khan Academy
+
+**Work & Design Tools:**  
+Notion · Figma · GitLab · Bitbucket · CodePen · Replit
+
+### 🔴 Distracting Sites (lose -5 points per minute)
+**Entertainment & Social Media:**  
+YouTube · Instagram · Facebook · Netflix · Reddit · TikTok · Twitter/X · Twitch · Pinterest · Tumblr · Snapchat · 9gag · BuzzFeed
+
+### 🟡 Regular Sites (earn +2 points per minute)
+Everything else — news sites, shopping, email, etc.
+
+*Note: You can customize these categories in the settings if you want to add your own favorite productive or distracting sites.*
 
 ---
 
-## Installation
+## Leveling Up
 
-### From Source (Developer Mode)
+**Here's how many points you need to reach each level:**
 
-1. **Clone / download** this repository.
+| Level | Points Needed | What This Means |
+|-------|---------------|-----------------|
+| 1 → 2 | 100 | About 10 minutes on productive sites |
+| 2 → 3 | 283 | About 30 minutes total |
+| 3 → 4 | 520 | About 50 minutes total |
+| 4 → 5 | 800 | About 1.5 hours total |
+| 5 → 10 | 1,118 - 3,162 | A few focused days |
+| 10 → 15 | 3,162 - 5,809 | About a week of focus |
+| 15 → 20 | 5,809 - 8,944 | Serious commitment! |
 
-2. **Generate icons** (if they don't already exist):
+*The higher you go, the more points you need — just like in real games!*
+
+---
+
+## Achievements You Can Unlock
+
+**🌱 Beginner Achievements:**
+- **First Steps** — Earn your first 100 points
+- **Productive Day** — Earn 50+ productive points in a single day
+- **Level Up!** — Reach Level 2
+
+**⚡ Intermediate Achievements:**
+- **Week Warrior** — Maintain a 7-day streak
+- **Apprentice** — Reach Level 5
+- **XP Hunter** — Collect 1,000 total points
+
+**🔥 Advanced Achievements:**
+- **Monthly Master** — Keep a 30-day streak going
+- **XP Legend** — Earn 5,000 total points
+- **Veteran** — Climb to Level 10
+
+**👑 Elite Achievements:**
+- **Century Streak** — Achieve a 100-day streak!
+- **Grandmaster** — Reach Level 15
+- **Transcendent** — Accumulate 20,000 total points
+
+---
+
+## How to Install
+
+**Easy 5-Step Setup:**
+
+1. **Download** this plugin folder to your computer
+
+2. **Optional:** If you want custom icons, open a command window in the folder and run:
    ```bash
    node generate-icons.js
    ```
+   *(You can skip this if icons already exist)*
 
-3. Open **Chrome** → navigate to `chrome://extensions/`.
+3. Open **Google Chrome** and type `chrome://extensions/` in the address bar
 
-4. Enable **Developer mode** (toggle in top-right).
+4. Turn on **Developer mode** using the toggle switch in the top-right corner
 
-5. Click **Load unpacked** → select the `XPulse---Plugin` folder.
+5. Click the **Load unpacked** button and select the XPulse plugin folder
 
-6. The ⚡ XPulse icon appears in your toolbar. **Pin it** for quick access.
+**That's it!** You'll see the ⚡ XPulse icon appear in your browser toolbar. Click it to pin it for easy access.
 
-7. Browse normally — XP ticks every 60 seconds on the active tab.
-
----
-
-## Data Integrity & Anti-Abuse
-
-- **Active tab only** — background tabs earn nothing.
-- **Visibility + focus** — content script confirms `document.hidden === false && document.hasFocus()`.
-- **Idle detection** — `chrome.idle` API pauses XP when user is away > 2 minutes.
-- **Per-tick cap** — maximum 10 XP per tick (prevents rapid-refresh farming).
-- **XP floor** — XP can never go below 0.
-- **Domain validation** — `new URL()` parsing; `chrome://`, `about:` pages are ignored.
+The plugin starts working automatically — just browse as normal, and you'll earn points based on what sites you visit!
 
 ---
 
-## Performance Notes
+## Fair Play & Accurate Tracking
 
-- **Service worker lifecycle** — background.js wakes only on alarm ticks (every 60 s), tab events, or messages. No persistent connection.
-- **Alarm-based tick** — uses `chrome.alarms` (Manifest V3 compliant) instead of `setInterval`, surviving service worker suspension.
-- **Atomic storage writes** — single `chrome.storage.local.set()` per tick with all updated fields.
-- **Lightweight content script** — ~50 lines, no DOM mutation, passive event listeners, throttled messaging.
-- **No external dependencies** — zero npm packages, zero network requests.
-- **Memory** — popup DOM is created/destroyed on open/close; no leaked intervals.
+**XPulse is designed to track real productivity, not gaming the system:**
+
+✅ **Only your active tab counts** — background tabs don't earn points  
+✅ **You must be actually using the browser** — minimized windows don't count  
+✅ **Idle detection** — if you step away for 2+ minutes, the timer pauses  
+✅ **Smart limits** — prevents earning too many points too quickly  
+✅ **Points can't go negative** — you stop at 0 points minimum  
+✅ **Secure tracking** — special browser pages (like settings) are ignored
+
+These features ensure your stats truly reflect your productivity habits!
 
 ---
 
-## Debug / Dev Mode
+## Privacy & Performance
 
-Open the service worker console via `chrome://extensions/` → XPulse → "Inspect views: service worker".
+**Your data stays private:**
+- ✅ Everything is stored locally on your computer
+- ✅ No data is sent to any servers
+- ✅ No tracking or analytics
+- ✅ Works completely offline
 
-Send messages from the console:
-```js
-// Force a tick immediately
-chrome.runtime.sendMessage({ type: 'FORCE_TICK' });
+**Lightweight & fast:**
+- ⚡ Uses minimal battery and memory
+- ⚡ Checks every 60 seconds (only when you're active)
+- ⚡ Won't slow down your browsing
+- ⚡ No ads, no pop-ups
 
-// Get full state
-chrome.runtime.sendMessage({ type: 'GET_STATE' }, console.log);
+---
 
-// Reset everything
-chrome.runtime.sendMessage({ type: 'RESET' });
+## Viewing Your Stats
 
-// Export JSON
-chrome.runtime.sendMessage({ type: 'EXPORT' }, (r) => console.log(r.json));
-```
+Click the ⚡ XPulse icon in your browser toolbar to see:
+- Your current level and points
+- Progress to next level (with a cool circular chart)
+- Your current streak
+- Weekly activity chart
+- All unlocked achievements
+- Export your data anytime as a backup
+
+---
+
+## Need Help?
+
+**Common Questions:**
+
+**Q: How do I reset my progress?**  
+A: Click the XPulse icon, then click the "Reset" button in the popup window.
+
+**Q: Can I export my data?**  
+A: Yes! Click the "Export Data" button in the popup to download all your stats.
+
+**Q: Why aren't I earning points?**  
+A: Make sure you're actively browsing (not idle), the tab is visible, and you're on a recognized website.
+
+**Q: Can I customize which sites are productive?**  
+A: Yes! You can add your own custom categories in the settings (future feature).
+
+**Q: Does this work on other browsers?**  
+A: Currently, XPulse is designed for Google Chrome. Other Chromium-based browsers (like Edge, Brave) may work but aren't officially supported.
+
+---
+
+## Why Use XPulse?
+
+**Perfect for:**
+- 🎓 Students who want to stay focused while studying
+- 💼 Professionals building better work habits
+- 🎯 Anyone trying to reduce time on distracting sites
+- 🏆 People who love gamification and tracking progress
+- 📊 Self-improvement enthusiasts
+
+**Benefits:**
+- Makes productivity visible and rewarding
+- Creates positive browsing habits through gamification
+- Helps you understand where your time goes
+- Motivates daily consistency with streaks
+- Celebrates your progress with achievements
+
+Transform boring productivity tracking into an engaging game. Every focused minute counts toward your next level!
 
 ---
 
 ## License
 
-MIT — built as a portfolio-grade engineering project.
+Free to use and modify (MIT License) — built as a showcase project.
